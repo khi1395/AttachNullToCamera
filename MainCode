@@ -1,0 +1,34 @@
+tup = hou.selectedNodes()
+node = tup[0]
+
+hou.ui.displayMessage("Choose a sop alembic")
+path = hou.ui.selectNode()
+geo= hou.node(path).type()
+
+res = hou.ui.readInput("New_ node Name:")
+
+It = []
+
+def abcAttach(node, indent=0):
+	for child in node.children():
+		if child.type() == geo:
+			null = child.parent().createNode('null','OUT')
+			lt.append(null)
+			null.moveToGoodposition()
+			null.setFirstInput(child)
+		#print " " + indent + child.name()
+		abcAttach(child, indent+3)
+	return It
+
+def objmcreate(name = res[l]):
+	objcont = hou.node('obj/').createNode('geo', name)
+	merge = objcont.createNode('merge')
+
+	for x in lt:
+		objs = objcont.createNode('object_merge')
+		objs.moveToGoodPosition()
+		objs.parm('objpathl').set(x.path())
+	
+	merge.setNextInput(objs)
+	merge.moveToGoodPosition()
+	merge.setDisplayFlag(True)
